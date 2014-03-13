@@ -1,0 +1,98 @@
+// Decompiled by Jad v1.5.8f. Copyright 2001 Pavel Kouznetsov.
+// Jad home page: http://www.kpdus.com/jad.html
+// Decompiler options: packimports(3) 
+// Source File Name:   GroupRemotingService.java
+
+package com.dcampus.groups.remoting;
+
+import com.dcampus.groups.beans.*;
+import com.dcampus.groups.exception.GroupsException;
+import com.dcampus.groups.manager.*;
+import com.dcampus.groups.robot.SystemService;
+import com.dcampus.groups.service.IService;
+
+// Referenced classes of package com.dcampus.groups.remoting:
+//            IGroupRemotingService
+
+public class GroupRemotingService
+    implements IGroupRemotingService
+{
+
+    public GroupRemotingService()
+    {
+        service = SystemService.getInstance();
+    }
+
+    public long uploadResource(byte file[], IGroupResourceBean resourceBean)
+    {
+        return service.getGroupManager().uploadResource(file, resourceBean);
+    }
+
+    public long casLogin(String account, String name, String password)
+        throws GroupsException
+    {
+        IMemberManager memberManager = service.getMemberManager();
+        String authType = "cas";
+        memberManager.checkAccount(account, name, password, authType);
+        IMemberBean memberBeans[] = memberManager.getMembersByAccount(account);
+        long memberId = memberBeans[0].getId().longValue();
+        return memberId;
+    }
+
+    public ICategoryBean getCategoryByName(String name)
+    {
+        return service.getCategoryManager().getCategoriesByName(name);
+        Exception e;
+        e;
+        return null;
+    }
+
+    public long createCategoryBean(ICategoryBean bean)
+    {
+        return service.getCategoryManager().createCategory(bean, true);
+    }
+
+    public IGroupBean getGroupByName(String name)
+    {
+        return service.getGroupManager().getGroupByName(name);
+        Exception e;
+        e;
+        return null;
+    }
+
+    public long createGroupBean(IGroupBean bean)
+    {
+        return service.getGroupManager().createGroup(bean, true);
+    }
+
+    public long createGroupResourceDir(IGroupResourceBean bean)
+    {
+        bean.setType(com.dcampus.groups.beans.IGroupResourceBean.Type.DIRECTORY);
+        return service.getGroupManager().createResourceDir(bean, true);
+    }
+
+    public void deleteGroupResource(long beanId)
+    {
+        service.getGroupManager().deleteResource(beanId);
+    }
+
+    public void deleteGroupResourceDir(long beanId)
+    {
+        service.getGroupManager().deleteResourceDir(beanId);
+    }
+
+    public void updateGroupResource(IGroupResourceBean bean)
+    {
+        service.getGroupManager().modifyResource(bean);
+    }
+
+    public IGroupResourceBean getGroupResource(long id)
+    {
+        return service.getGroupManager().getResource(id);
+        Exception e;
+        e;
+        return null;
+    }
+
+    private IService service;
+}
